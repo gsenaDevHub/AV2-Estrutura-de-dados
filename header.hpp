@@ -115,7 +115,7 @@ struct FilaLista{
 };
 
 int filaVazia(FilaLista& f);
-void enfileirar(FilaLista& f, Paciente* paciente, Medico* medico, Sala* sala);
+void enfileirar(FilaLista& f, PacienteLista& p, MedicoLista& m, SalaLista& s);
 void desenfileirar(FilaLista& f);
 void listarFila(FilaLista& f);
 

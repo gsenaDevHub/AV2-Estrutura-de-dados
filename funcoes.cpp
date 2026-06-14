@@ -394,3 +394,64 @@ int atualizarSala(SalaLista &l){
     }while(op != 4);
     return 0;
 }
+
+// ================= FILA =================
+
+int filaVazia(FilaLista &l){
+    if(l.inicio == nullptr){
+        cout << "Não há fila cadastradas!" << endl;
+        return 0;
+    }
+    return 1;
+}
+
+void enfileirar(FilaLista &f, PacienteLista &p, MedicoLista &m, SalaLista &s){
+    NoFila* novo = new NoFila();
+    
+    int pacienteID,medicoID,salaID;
+    cout << "Digite o ID do Paciente: ";
+    cin >> pacienteID;
+    cout << "Digite o ID do Médico: ";
+    cin >> medicoID;
+    cout << "Digite o ID do Sala: ";
+    cin >> salaID;
+    novo->paciente = buscarPaciente(p,pacienteID);
+    novo->medico   = buscarMedico(m,medicoID);
+    novo->sala     = buscarSala(s,salaID);
+
+    if(novo->paciente == nullptr ||
+    novo->medico == nullptr ||
+    novo->sala == nullptr){
+        delete novo;
+        return;
+    }
+
+    if(f.inicio == nullptr){ f.inicio = novo; return; }
+
+    NoFila* aux = f.inicio;
+    
+    while(aux->prox != nullptr) aux = aux->prox;
+    aux->prox = novo;
+}
+
+void desenfileirar(FilaLista &f){
+    if(filaVazia(f) == 0) return;
+    NoFila* aux = f.inicio;
+    f.inicio = aux->prox;
+    delete aux;
+}
+
+void listarFila(FilaLista &f){
+    if(filaVazia(f) == 0) return;
+    NoFila* aux = f.inicio;
+    int cont = 1;
+    cout << "=========== Fila de Consultas ===========" << endl;
+    while(aux != nullptr){
+        cout << "Consulta " << cont++ << endl;
+        cout << "Paciente: "   << aux->paciente->nome << endl;
+        cout << "Médico: "     << aux->medico->nome   << endl;
+        cout << "Sala nº: "    << aux->sala->numero   << endl;
+        aux = aux->prox;
+    }
+    cout << "=========================================" << endl;
+}

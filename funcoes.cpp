@@ -72,12 +72,43 @@ int removerPaciente(PacienteLista &l){
 
 void listarPacientes(PacienteLista &l){
     if(empty(l) == 0) return;
+
+    // ===== INSERTION SORT por nome =====
+    Paciente* ordenado = nullptr;  // nova lista ordenada
+    Paciente* atual = l.inicio;
+
+    while(atual != nullptr){
+        Paciente* proximo = atual->prox;  // guarda o próximo antes de desligar
+
+        if(ordenado == nullptr || atual->nome <= ordenado->nome){
+            // insere no início da lista ordenada
+            atual->prox = ordenado;
+            ordenado = atual;
+        } else {
+            // percorre até achar a posição correta
+            Paciente* aux = ordenado;
+            while(aux->prox != nullptr && aux->prox->nome < atual->nome)
+                aux = aux->prox;
+            atual->prox = aux->prox;
+            aux->prox = atual;
+        }
+        atual = proximo;
+    }
+
+    l.inicio = ordenado;  // atualiza a lista original já ordenada
+    // ===================================
+
     Paciente* aux = l.inicio;
     int cont = 1;
     cout << "=========== Lista Pacientes ===========" << endl;
     while(aux != nullptr){
         cout << "Paciente " << cont++ << endl;
-        cout << aux->nome << endl;
+        cout << "Nome: "     << aux->nome     << endl;
+        cout << "Idade: "    << aux->idade    << endl;
+        cout << "CPF: "      << aux->cpf      << endl;
+        cout << "Telefone: " << aux->telefone << endl;
+        cout << "Endereço: " << aux->endereco << endl;
+        cout << "---------------------------------------" << endl;
         aux = aux->prox;
     }
     cout << "=======================================" << endl;
@@ -361,14 +392,36 @@ int removerSala(SalaLista &l){
 
 void listarSalas(SalaLista &l){
     if(empty(l) == 0) return;
+
+    // ===== SELECTION SORT por numero da sala =====
+    Sala* i = l.inicio;
+    while(i != nullptr){
+        Sala* minimo = i;
+        Sala* j = i->prox;
+        while(j != nullptr){// sala com menor numero
+            if(j->capacidade < minimo->capacidade)
+                minimo = j;
+            j = j->prox;
+        }
+        if(minimo != i){
+            swap(i->id,         minimo->id);
+            swap(i->numero,     minimo->numero);
+            swap(i->capacidade, minimo->capacidade);
+            swap(i->disponivel, minimo->disponivel);
+        }
+        i = i->prox;
+    }
+    // =============================================
+
     Sala* aux = l.inicio;
     int cont = 1;
     cout << "=========== Lista Salas ===========" << endl;
     while(aux != nullptr){
         cout << "Sala " << cont++ << endl;
-        cout << "Numero: " << aux->numero
-             << " | Capacidade: " << aux->capacidade
-             << " | Disponivel: " << (aux->disponivel ? "Sim" : "Não") << endl;
+        cout << "Numero: "      << aux->numero     << endl;
+        cout << "Capacidade: "  << aux->capacidade << endl;
+        cout << "Disponivel: "  << (aux->disponivel ? "Sim" : "Não") << endl;
+        cout << "-----------------------------------" << endl;
         aux = aux->prox;
     }
     cout << "===================================" << endl;
